@@ -54,4 +54,4 @@ def criandoRegistro(lista_dados, id_count):
         print(f"\nRegistro criado com ID: {id_count}")
         id_count += 1     #provavel bug no contador.
         pausaTemporaria()     
-        break
+        return id_count

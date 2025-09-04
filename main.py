@@ -34,8 +34,8 @@ while True:
     match opcao:
         # CREATE - Criar registro
         case "1":
-            criandoRegistro(dados, id_counter)
-
+            id_counter=criandoRegistro(dados, id_counter)
+            
         # READ - Listar registros
         case "2":
             listandoRegistros(dados)
