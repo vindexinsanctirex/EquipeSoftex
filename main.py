@@ -7,56 +7,69 @@
         novos registros, porém, todos ficam com o Id = 1.
 '''
 
-#Importando todos os arquivos para a função main.
-from utils.criar_registro import criandoRegistro
-from utils.listar_registros import listandoRegistros
-from utils.deletar_registro import deletarRegistro
-from utils.atualizar_registro import atualizarRegistro
+
+from utils.sistema_crud import SistemaCRUD
 from utils.funcoes import limpa_Tela, pausaTemporaria, telaCarregamento
 
-#biblioteca a parte.
-import time
 
-dados = []
-id_counter = 1
+sistema = SistemaCRUD()
 
 while True:
     limpa_Tela()
-    print("\n=== SISTEMA CRUD ===")
+    print("\n=== SISTEMA CRUD (OOP) ===")
     print("1. Criar registro")
     print("2. Listar registros")
     print("3. Atualizar registro")
     print("4. Deletar registro")
     print("5. Sair")
-    
+
     opcao = input("\n>> ")
-    
-    match opcao:
-        # CREATE - Criar registro
-        case "1":
-            id_counter=criandoRegistro(dados, id_counter)
-            
-        # READ - Listar registros
-        case "2":
-            listandoRegistros(dados)
 
-        # UPDATE - Atualizar registro
-        case "3":
-            atualizarRegistro(dados)
-
-        # DELETE - Deletar registro
-        case "4":
-            deletarRegistro(dados)
-
-        # SAIR
-        case "5":
-            print("\nSaindo...")
-            #Apenas uma adição visual | O código está em funcoes.py
-            telaCarregamento()
-            exit()
-        
-        case _:
-            limpa_Tela()   #Add visual | funcoes.py
-            print(f'\nA opção "{opcao}" inválida! Tente novamente.')
-            pausaTemporaria()
-                
+    if opcao == "1":
+        try:
+            nome = input("Nome: ")
+            email = input("Email: ")
+            cpf = input("CPF (apenas números): ")
+            idade = input("Idade: ")
+            sistema.criar_registro(nome, email, cpf, idade)
+            print("\nRegistro criado com sucesso!")
+        except Exception as e:
+            print(f"Erro: {e}")
+        pausaTemporaria()
+    elif opcao == "2":
+        limpa_Tela()
+        registros = sistema.listar_registros()
+        if not registros:
+            print("Nenhum registro encontrado.")
+        else:
+            for r in registros:
+                print(f"ID: {r.id}, Nome: {r.nome}, Email: {r.email}, CPF: {r.cpf}, Idade: {r.idade}")
+        pausaTemporaria()
+    elif opcao == "3":
+        try:
+            id_reg = int(input("ID do registro a atualizar: "))
+            nome = input("Novo nome (deixe em branco para manter): ")
+            email = input("Novo email (deixe em branco para manter): ")
+            cpf = input("Novo CPF (deixe em branco para manter): ")
+            idade = input("Nova idade (deixe em branco para manter): ")
+            sistema.atualizar_registro(id_reg, nome or None, email or None, cpf or None, idade or None)
+            print("Registro atualizado com sucesso!")
+        except Exception as e:
+            print(f"Erro: {e}")
+        pausaTemporaria()
+    elif opcao == "4":
+        try:
+            id_reg = int(input("ID do registro a deletar: "))
+            sistema.deletar_registro(id_reg)
+            print("Registro deletado com sucesso!")
+        except Exception as e:
+            print(f"Erro: {e}")
+        pausaTemporaria()
+    elif opcao == "5":
+        print("\nSaindo...")
+        telaCarregamento()
+        exit()
+    else:
+        limpa_Tela()
+        print(f'\nA opção "{opcao}" inválida! Tente novamente.')
+        pausaTemporaria()
